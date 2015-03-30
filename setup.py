@@ -9,7 +9,7 @@ setup(name="MaterialDjango",
       author_email="jack@getpizza.cat",
       description="",
       #license
-      install_requires=["django", "vulcanize",],
+      install_requires=["django", "vulcanize", 'bower.py'],
       url="https://github.com/Colorless-Green-Ideas/MaterialDjango",
       classifiers=["License :: OSI Approved :: MIT License", 
       "Framework :: Django", "Topic :: Text Processing :: Markup :: HTML",]
