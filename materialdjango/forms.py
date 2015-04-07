@@ -5,7 +5,7 @@ from widgets import PaperTextInput, PaperPasswordInput
 def mangle_form(form):
     "Utility to monkeypatch forms into paperinputs, untested"
     for field in form.fields:
-        if type(field.widget) is forms.widgets.Textarea:
+        if type(field.widget) is forms.widgets.TextInput:
             field.widget = PaperTextInput()
             field.label = ''
         if type(field.widget) is forms.widgets.PasswordInput:
