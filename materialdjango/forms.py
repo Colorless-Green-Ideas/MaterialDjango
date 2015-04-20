@@ -1,14 +1,23 @@
 from django import forms
+from  django.contrib.auth.forms import AuthenticationForm
 from widgets import PaperTextInput, PaperPasswordInput
+
+
+class PaperLoginForm(AuthenticationForm):
+    username = forms.CharField(max_length=254, label='', widget=PaperTextInput)
+    password = forms.CharField(label='', widget=PaperPasswordInput)
+    def __init__(self, request):
+        super(PaperLoginForm, self).__init__()
+
 
 
 def mangle_form(form):
     "Utility to monkeypatch forms into paperinputs, untested"
-    for field in form.fields:
-        if type(field.widget) is forms.widgets.TextInput:
-            field.widget = PaperTextInput()
-            field.label = ''
-        if type(field.widget) is forms.widgets.PasswordInput:
+    for field, widget in form.fields.iteritems():
+        if type(widget) is forms.widgets.TextInput:
+            form.fields[field].widget = PaperTextInput()
+            form.fields[field].label = ''
+        if type(widget) is forms.widgets.PasswordInput:
             field.widget = PaperPasswordInput()
             field.label = ''
     return form

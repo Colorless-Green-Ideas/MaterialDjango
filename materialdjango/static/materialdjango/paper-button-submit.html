@@ -1,0 +1,18 @@
+<polymer-element name="paper-button-submit" extends="button" noscript>
+ <!-- https://github.com/Polymer/paper-button/issues/14 -->
+  <template>
+    <style>
+      :host {
+        border: 0;
+        padding: 0;
+        font-size: inherit;
+        background: #526E9C;
+        color: white;
+        font-weight: bolder;
+      }
+    </style>
+    <paper-button>
+      <content></content>
+    </paper-button>
+  </template>
+</polymer-element>

@@ -28,7 +28,6 @@ class PaperPasswordInput(PasswordInput):
             html = """<paper-input-decorator label='{0}' floatingLabel>
             <input is="core-input" name="password" type="password"/>
             </paper-input-decorator>"""
-            print html
             return format_html(html, name)
         else:
             html = """<paper-input-decorator label='{0}'  type="password" floatingLabel>
