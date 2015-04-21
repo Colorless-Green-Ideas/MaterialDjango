@@ -6,8 +6,8 @@ from widgets import PaperTextInput, PaperPasswordInput
 class PaperLoginForm(AuthenticationForm):
     username = forms.CharField(max_length=254, label='', widget=PaperTextInput)
     password = forms.CharField(label='', widget=PaperPasswordInput)
-    def __init__(self, request):
-        super(PaperLoginForm, self).__init__()
+    def __init__(self, request, *args, **kwargs):
+        super(PaperLoginForm, self).__init__(*args, **kwargs)
 
 
 
