@@ -2,6 +2,7 @@
   "name": "core-focusable",
   "private": false,
   "dependencies": {
-    "polymer": "Polymer/polymer#master"
-  }
+    "polymer": "Polymer/polymer#^0.5"
+  },
+  "version": "0.5.5"
 }
