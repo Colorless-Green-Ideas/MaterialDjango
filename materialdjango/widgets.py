@@ -36,15 +36,21 @@ class PaperPasswordInput(PasswordInput):
             return format_html(html, name, value)
 
 class PaperEmailInput(EmailInput):
+    def __init__(self, attrs=None):
+        if attrs is not None:
+            self.attrs = attrs.copy()
+        else:
+            self.attrs = {}
     def render(self, name, value, attrs=None):
-    # Unlike inputs using paper-input-decorator directly,
-    # paper-input does not work out of the box with the native form
-    # element.
         if value is None:
             html = """<paper-input-decorator label='{0}' floatingLabel autoValidate>
-            <input is="core-input" name="{0}" type="email">
+            <input is="core-input" name="{1}" type="email">
             </paper-input-decorator>"""
-            return format_html(html, name)
+            if 'label' in self.attrs:
+                print "Hello"
+                return html.format(self.attrs['label'], name)
+            else:
+                return format_html(html, name, name)
         else:
             html = """<paper-input-decorator label='{0}' floatingLabel autoValidate>
             <input is="core-input" name="{0}" value="{1}" type="email">
