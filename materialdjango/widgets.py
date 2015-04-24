@@ -47,7 +47,6 @@ class PaperEmailInput(EmailInput):
             <input is="core-input" name="{1}" type="email">
             </paper-input-decorator>"""
             if 'label' in self.attrs:
-                print "Hello"
                 return html.format(self.attrs['label'], name)
             else:
                 return format_html(html, name, name)
