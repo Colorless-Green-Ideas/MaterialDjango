@@ -26,12 +26,12 @@ class PaperPasswordInput(PasswordInput):
     def render(self, name, value, attrs=None):
         if value is None:
             html = """<paper-input-decorator label='{0}' floatingLabel>
-            <input is="core-input" name="password" type="password"/>
+            <input is="core-input" name="{0}" type="password"/>
             </paper-input-decorator>"""
             return format_html(html, name)
         else:
             html = """<paper-input-decorator label='{0}'  type="password" floatingLabel>
-            <input is="core-input" name="password" type="password" value="{1}"/>
+            <input is="core-input" name="{0}" type="password" value="{1}"/>
             </paper-input-decorator>"""
             return format_html(html, name, value)
 
