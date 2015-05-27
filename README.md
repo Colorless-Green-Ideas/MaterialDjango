@@ -3,3 +3,29 @@
 [![PyPI](https://img.shields.io/pypi/v/materialdjango.svg)](https://pypi.python.org/pypi/MaterialDjango)
 
 Polymer Paper-UI widgets and tools for django
+
+
+# Install
+ - `pip install materialdjango`
+ - add `materialdjango` to your INSTALLED_APPS in settings.py
+ - re-run `manage.py collectstatic`
+
+# Getting Started
+ - make sure you {% load staticfiles %}
+ - and also add {% load polymerdep %} which imports our filter `|dep`
+ - Add the webcomponents.js shim
+ - use `dep` to import included polymer html elements (currently 5.0)
+
+Eg:
+```html
+{% load staticfiles %}
+{% load polymerdep %}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script src={{"{% static 'materialdjango/components/bower_components/webcomponentsjs/webcomponents.js' }}%}"></script>
+    {{ "polymer/polymer.html" | dep}}
+    {{ "core-scaffold/core-scaffold.html" | dep}}
+<...>
+```
