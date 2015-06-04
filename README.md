@@ -29,3 +29,10 @@ Eg:
     {{ "core-scaffold/core-scaffold.html" | dep}}
 <...>
 ```
+
+## I want to go faster
+
+Use my `base.html` template with `vinyl-siding.html` which is imspired by the polymer documentation.
+
+`{% extends "vinyl-siding.html" %}`
+

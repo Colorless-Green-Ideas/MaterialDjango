@@ -6,18 +6,20 @@ from django.utils.html import format_html
 class PaperTextInput(TextInput):
 
     def render(self, name, value, attrs=None):
-        # Unlike inputs using paper-input-decorator directly,
+        # Unlike inputs using paper-input-container directly,
         # paper-input does not work out of the box with the native form
         # element.
         if value is None:
-            html = """<paper-input-decorator label='{0}' floatingLabel>
-            <input is="core-input" name="{0}">
-            </paper-input-decorator>"""
+            html = """<paper-input-container label='{0}' floatingLabel attr-for-value="value">
+            <label>{0}</label>
+            <input is="iron-input" class="paper-input-input" name="{0}">
+            </paper-input-container>"""
             return format_html(html, name)
         else:
-            html = """<paper-input-decorator label='{0}' floatingLabel>
-            <input is="core-input" name="{0}" value="{1}">
-            </paper-input-decorator>"""
+            html = """<paper-input-container label='{0}' floatingLabel attr-for-value="value">
+            <label>{0}</label>
+            <input is="iron-input" name="{0}" value="{1}">
+            </paper-input-container>"""
             return format_html(html, name, value)
 
 
@@ -25,14 +27,16 @@ class PaperPasswordInput(PasswordInput):
 
     def render(self, name, value, attrs=None):
         if value is None:
-            html = """<paper-input-decorator label='{0}' floatingLabel>
-            <input is="core-input" name="{0}" type="password"/>
-            </paper-input-decorator>"""
+            html = """<paper-input-container label='{0}' floatingLabel attr-for-value="value">
+            <label>{0}</label>
+            <input is="iron-input" name="{0}" type="password"/>
+            </paper-input-container>"""
             return format_html(html, name)
         else:
-            html = """<paper-input-decorator label='{0}'  type="password" floatingLabel>
-            <input is="core-input" name="{0}" type="password" value="{1}"/>
-            </paper-input-decorator>"""
+            html = """<paper-input-container label='{0}'  type="password" floatingLabel attr-for-value="value">
+            <label>{0}</label>
+            <input is="iron-input" name="{0}" type="password" value="{1}"/>
+            </paper-input-container>"""
             return format_html(html, name, value)
 
 class PaperEmailInput(EmailInput):
@@ -43,15 +47,17 @@ class PaperEmailInput(EmailInput):
             self.attrs = {}
     def render(self, name, value, attrs=None):
         if value is None:
-            html = """<paper-input-decorator label='{0}' floatingLabel autoValidate>
-            <input is="core-input" name="{1}" type="email">
-            </paper-input-decorator>"""
+            html = """<paper-input-container label='{0}' floatingLabel autoValidate attr-for-value="value">
+            <label>{0}</label>
+            <input is="iron-input" name="{1}" type="email">
+            </paper-input-container>"""
             if 'label' in self.attrs:
                 return html.format(self.attrs['label'], name)
             else:
                 return format_html(html, name, name)
         else:
-            html = """<paper-input-decorator label='{0}' floatingLabel autoValidate>
-            <input is="core-input" name="{0}" value="{1}" type="email">
-            </paper-input-decorator>"""
+            html = """<paper-input-container label='{0}' floatingLabel autoValidate attr-for-value="value">
+            <label>{0}</label>
+            <input is="iron-input" name="{0}" value="{1}" type="email">
+            </paper-input-container>"""
             return format_html(html, name, value)

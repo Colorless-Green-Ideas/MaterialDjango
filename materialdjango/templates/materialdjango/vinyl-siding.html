@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load polymerdep %}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <script src="{% static 'materialdjango/components/bower_components/webcomponentsjs/webcomponents-lite.js' %}"></script>
+    {# If this ^ is moved to bottom of page... it barfs thanks google. #}
+
+    {{"iron-icons/iron-icons.html"| dep}}
+
+    {{"paper-button/paper-button.html" |dep }}
+    {{"paper-drawer-panel/paper-drawer-panel.html"| dep}}
+    {{"paper-header-panel/paper-header-panel.html"| dep}}
+    {{"paper-icon-button/paper-icon-button.html"| dep}}
+    {{"paper-toolbar/paper-toolbar.html"| dep}}
+    {{"paper-material/paper-material.html"| dep}}
+    {{"paper-input/paper-input-container.html" |dep}}
+    {{"iron-input/iron-input.html"|dep}}
+{#     <link rel="import" href="{% static 'materialdjango/paper-button-submit.html' %}">#}
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+    <style type="text/css">
+      html{
+          font-family: 'Roboto', sans-serif;
+      }
+      paper-button{
+        background: #526E9C;
+        color: white;
+        font-weight: bolder;
+    /*    margin: 15px;*/
+        font-size: 16px;
+      }
+      .content{
+        font-size: 18pt;
+/*        margin: 20px;
+*/      }
+      {% block css %}
+      {% endblock %}
+    </style>
+
+    {% block head %}{% endblock %}
+    {% block title %}<title>Vinyl Siding: title</title> {% endblock %}
+</head>
+
+{% if 'debug' %}
+<body>
+{%else%} 
+<body unresolved> 
+{%endif%}
+
+<paper-drawer-panel id="drawerPanel" responsive-width="1280px">
+
+  <div class="nav" drawer>
+    <!-- Nav Content -->
+        {% block menu %}
+        {% endblock %}
+  </div>
+
+  <paper-header-panel class="main" main mode="waterfall">
+
+    <!-- Main Toolbar -->
+    <paper-toolbar>
+      <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+      <div title>{% block tool_title%}Many material Wow: tool_title{%endblock%}</div>
+    </paper-toolbar>
+
+    <!-- Main Content -->
+    <div class="content">
+        {% block body %}
+        {% endblock %}
+    </div>
+
+  </paper-header-panel>
+
+</paper-drawer-panel>
+</body>
+</html>
+<!-- 
+<core-scaffold rightDrawer>
+    <core-header-panel navigation flex mode="seamed">
+    <core-toolbar style="background-color: #526E9C; color: #fff;">
+    </core-toolbar>
+    <core-menu theme="core-light-theme">
+
+
+    </core-menu>
+    </core-header-panel>
+    <div tool></div>
+        <div class="content" fit> 
+
+        </div>
+</core-scaffold> -->
