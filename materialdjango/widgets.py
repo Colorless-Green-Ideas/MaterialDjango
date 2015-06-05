@@ -10,13 +10,13 @@ class PaperTextInput(TextInput):
         # paper-input does not work out of the box with the native form
         # element.
         if value is None:
-            html = """<paper-input-container label='{0}' floatingLabel attr-for-value="value">
+            html = """<paper-input-container label='{0}' >
             <label>{0}</label>
-            <input is="iron-input" class="paper-input-input" name="{0}">
+            <input is="iron-input" name="{0}" class="paper-input-input">
             </paper-input-container>"""
             return format_html(html, name)
         else:
-            html = """<paper-input-container label='{0}' floatingLabel attr-for-value="value">
+            html = """<paper-input-container label='{0}' attr-for-value="value">
             <label>{0}</label>
             <input is="iron-input" name="{0}" value="{1}">
             </paper-input-container>"""
@@ -27,13 +27,13 @@ class PaperPasswordInput(PasswordInput):
 
     def render(self, name, value, attrs=None):
         if value is None:
-            html = """<paper-input-container label='{0}' floatingLabel attr-for-value="value">
+            html = """<paper-input-container label='{0}'>
             <label>{0}</label>
             <input is="iron-input" name="{0}" type="password"/>
             </paper-input-container>"""
             return format_html(html, name)
         else:
-            html = """<paper-input-container label='{0}'  type="password" floatingLabel attr-for-value="value">
+            html = """<paper-input-container label='{0}'  type="password" attr-for-value="value">
             <label>{0}</label>
             <input is="iron-input" name="{0}" type="password" value="{1}"/>
             </paper-input-container>"""
@@ -47,7 +47,7 @@ class PaperEmailInput(EmailInput):
             self.attrs = {}
     def render(self, name, value, attrs=None):
         if value is None:
-            html = """<paper-input-container label='{0}' floatingLabel autoValidate attr-for-value="value">
+            html = """<paper-input-container label='{0}' autoValidate>
             <label>{0}</label>
             <input is="iron-input" name="{1}" type="email">
             </paper-input-container>"""
@@ -56,7 +56,7 @@ class PaperEmailInput(EmailInput):
             else:
                 return format_html(html, name, name)
         else:
-            html = """<paper-input-container label='{0}' floatingLabel autoValidate attr-for-value="value">
+            html = """<paper-input-container label='{0}' autoValidate attr-for-value="value">
             <label>{0}</label>
             <input is="iron-input" name="{0}" value="{1}" type="email">
             </paper-input-container>"""
