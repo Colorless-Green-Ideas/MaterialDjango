@@ -1,11 +1,11 @@
-<polymer-element name="paper-button-submit" extends="button" noscript>
- <!-- https://github.com/Polymer/paper-button/issues/14 -->
+<dom-module id="paper-button-submit">
   <template>
     <style>
       :host {
         border: 0;
         padding: 0;
         font-size: 16px;
+        margin: 0px;
         font-family: "Roboto",sans-serif;
         border-radius: 3px;
         background: #526E9C;
@@ -17,9 +17,22 @@
         box-sizing: border-box;
         margin: 0px;
       }
+      paper-button{
+        margin-bottom: -4px;
+        margin-top: -4px;
+        margin-left:-10px;
+        margin-right: -10px;
+      }
     </style>
-    <paper-button>
+    <paper-button class="submitButton">
       <content></content>
     </paper-button>
   </template>
-</polymer-element>
+</dom-module>
+<script>
+  // element registration
+  Polymer({
+    is: "paper-button-submit",
+    extends: 'button',
+  });
+</script>
