@@ -14,7 +14,7 @@ Polymer Paper-UI widgets and tools for django
  - make sure you `{% load staticfiles %}`
  - and also add `{% load polymerdep %}` which imports our filter `|dep`
  - Add the webcomponents.js shim
- - use `dep` to import included polymer html elements (currently 5.0)
+ - use `dep` to import included polymer html elements (currently 1.0)
 
 Eg:
 ```html
