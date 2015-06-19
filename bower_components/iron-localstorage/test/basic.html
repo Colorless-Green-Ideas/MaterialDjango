@@ -30,6 +30,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
+  <template id="boundTemplate" is="dom-bind">
+    <iron-localstorage id="boundLocal" name="iron-localstorage-test" value="{{value}}"></iron-localstorage>
+  </template>
+
   <script>
     var storage;
 
@@ -37,8 +41,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       setup(function() {
         window.localStorage.setItem('iron-localstorage-test', '{"foo":"bar"}');
-        document.getElementById('fixture').create();
-        storage = document.getElementById('localstorage');
+        storage = document.getElementById('fixture').create();
+        storage.flushDebouncer('reload');
       });
 
       teardown(function() {
@@ -53,6 +57,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('save', function() {
         var newValue = {'foo': 'zot'};
         storage.value = newValue;
+        storage.flushDebouncer('save');
         var v = window.localStorage.getItem(storage.name);
         v = JSON.parse(v);
         assert.equal(v.foo, newValue.foo);
@@ -60,6 +65,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       test('delete', function() {
         storage.value = null;
+        storage.flushDebouncer('save');
         var v = window.localStorage.getItem(storage.name);
         assert.isNull(v);
       });
@@ -73,11 +79,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
 
       test('event iron-localstorage-load-empty', function(done) {
+        window.localStorage.removeItem('iron-localstorage-test');
+
         var ls = document.createElement('iron-localstorage');
         ls.addEventListener('iron-localstorage-load-empty', function() {
+          // testing recommended way to initialize localstorage
+          ls.value = "Yo";
+          ls.flushDebouncer('save');
+          assert.equal("Yo", JSON.parse( window.localStorage.getItem('iron-localstorage-test')));
           done();
         });
-        ls.name = 'iron-localstorage-not-exist';
+        ls.name = 'iron-localstorage-test';
+      });
+
+      test('auto-save sub-properties', function() {
+        var t = document.querySelector('#boundTemplate');
+        var ls = document.querySelector('#boundLocal');
+        var value = { foo: 'FOO', bar: 'BAR' };
+        t.value = value;
+        assert.equal('FOO', ls.value.foo); // value has propagated from template to storage
+
+        ls.flushDebouncer('save');
+        t.value.foo = "Yo";
+        ls.flushDebouncer('save');
+        var item = JSON.parse( window.localStorage.getItem('iron-localstorage-test'));
+        assert.notEqual('Yo', item.foo); // did not propagate because did not use setters
+
+        t.set('value.foo', 'BAZ!');
+        ls.flushDebouncer('save');
+        var item = JSON.parse( window.localStorage.getItem('iron-localstorage-test'));
+        assert.equal('BAZ!', item.foo); // did propagate
+        ls.value = null;
       });
 
     });

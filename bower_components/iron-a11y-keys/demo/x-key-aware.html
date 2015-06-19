@@ -9,7 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../iron-a11y-keys-behavior.html">
+<link rel="import" href="../../paper-styles/paper-styles.html">
 <link rel="import" href="../iron-a11y-keys.html">
 
 <dom-module id="x-key-aware">
@@ -18,9 +18,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       display: block;
       position: relative;
     }
+
+    pre {
+      color: var(--google-blue-700);
+    }
+    
+    .keys {
+      line-height: 25px;
+    }
+
+    .keys span {
+      cursor: default;
+      background-color: var(--google-grey-100);
+      border: 1px solid var(--google-grey-300);
+      padding: 1px 5px;
+      border-radius: 5px;
+    }
   </style>
   <template>
-    <span>Press any of these keys: <span>[[boundKeys]]</span></span>
+    <h4>Press any of these keys</h4>
+    <span class="keys">
+      <template is="dom-repeat" items="[[boundKeys]]">
+        <span>{{item}}</span>
+      </template>
+    </span>
     <iron-a11y-keys
       id="keys"
       keys="* pageup pagedown left right down up shift+a alt+a home end space enter"
@@ -35,10 +56,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   Polymer({
     is: 'x-key-aware',
 
-    behaviors: [
-      Polymer.IronA11yKeysBehavior
-    ],
-
     properties: {
       pressed: {
         type: String,
@@ -47,7 +64,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       boundKeys: {
-        type: String
+        type: Array
       },
 
       target: {
@@ -58,12 +75,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     },
 
-    keyBindings: {
-      '* pageup pagedown left right down up shift+a alt+a home end space enter': '_updatePressed'
-    },
-
     ready: function() {
-      this.boundKeys = this.$.keys.keys;
+      this.boundKeys = this.$.keys.keys.split(' ');
     },
 
     _updatePressed: function(event) {

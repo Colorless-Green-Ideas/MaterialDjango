@@ -57,110 +57,114 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <script>
       suite('defaults', function() {
-        var g1;
-        var g2;
-        var g3;
-
-        setup(function() {
-          g1 = fixture('NoSelection');
-          g2 = fixture('WithSelection');
-          g3 = fixture('WithDisabled');
-        });
+        var LEFT_ARROW = 37;
+        var RIGHT_ARROW = 39;
 
         test('group can have no selection', function () {
-          expect(g1.selected).to.not.be.ok;
-          var items = g1.items;
+          var g = fixture('NoSelection');
+          expect(g.selected).to.not.be.ok;
+          var items = g.items;
           expect(items.length).to.be.equal(3);
           expect(items[0].checked).to.be.equal(false);
           expect(items[1].checked).to.be.equal(false);
           expect(items[2].checked).to.be.equal(false);
         });
 
-        test('group can have a selection', function (done) {
-          expect(g2.selected).to.be.ok;
-          var items = g2.items;
+        test('group can have a selection', function () {
+          var g = fixture('WithSelection');
+          expect(g.selected).to.be.ok;
+          var items = g.items;
           expect(items.length).to.be.equal(3);
 
-          g2.addEventListener('paper-radio-group-changed', function () {
-            expect(items[0].checked).to.be.equal(true);
-            expect(items[1].checked).to.be.equal(false);
-            expect(items[2].checked).to.be.equal(false);
-
-            expect(items[0].getAttribute('name')).to.be.equal(g2.selected);
-            done();
-          });
+          expect(items[0].checked).to.be.equal(true);
+          expect(items[1].checked).to.be.equal(false);
+          expect(items[2].checked).to.be.equal(false);
+          expect(items[0].getAttribute('name')).to.be.equal(g.selected);
         });
 
         test('right arrow advances the selection', function (done) {
-          debugger
-          var items = g2.items;
+          var g = fixture('WithSelection');
+          var items = g.items;
 
-          // Initially, the first item is checked.
-          var expectedCheckedItem = 0;
-          g2.addEventListener('paper-radio-group-changed', function () {
-            expect(items[expectedCheckedItem].checked).to.be.equal(true);
+          expect(items[0].checked).to.be.equal(true);
 
-            // Right arrow should go to the next item.
-            expectedCheckedItem = 1;
-            var event = new CustomEvent('keydown');
-            event.keyCode = event.code = 39;
-            g2.dispatchEvent(event);
-
+          g.addEventListener('paper-radio-group-changed', function () {
+            expect(items[0].checked).to.be.equal(false);
+            expect(items[1].checked).to.be.equal(true);
+            expect(items[2].checked).to.be.equal(false);
             done();
           });
+
+          MockInteractions.keyDownOn(g, RIGHT_ARROW);
         });
 
         test('left arrow reverses the selection', function (done) {
-          var items = g2.items;
+          var g = fixture('WithSelection');
+          var items = g.items;
 
-          // Initially, the first item is checked.
-          var expectedCheckedItem = 0;
-          g2.addEventListener('paper-radio-group-changed', function () {
-            expect(items[expectedCheckedItem].checked).to.be.equal(true);
+          expect(items[0].checked).to.be.equal(true);
 
-            // Left arrow should go to the last item.
-            expectedCheckedItem = 2;
-            var event = new CustomEvent('keydown');
-            event.keyCode = event.code = 37;
-            g2.dispatchEvent(event);
-
+          g.addEventListener('paper-radio-group-changed', function () {
+            expect(items[0].checked).to.be.equal(false);
+            expect(items[1].checked).to.be.equal(false);
+            expect(items[2].checked).to.be.equal(true);
             done();
           });
+          MockInteractions.keyDownOn(g, LEFT_ARROW);
         });
 
         test('selection should skip disabled items', function (done) {
-          var items = g3.items;
+          var g = fixture('WithDisabled');
+          var items = g.items;
 
-          // Initially, the first item is checked.
-          var expectedCheckedItem = 0;
-          g3.addEventListener('paper-radio-group-changed', function () {
-            expect(items[expectedCheckedItem].checked).to.be.equal(true);
+          expect(items[0].checked).to.be.equal(true);
 
-            // Right arrow should go to the last item, since the second item is
-            // disabled.
-            expectedCheckedItem = 2;
-            var event = new CustomEvent('keydown');
-            event.keyCode = event.code = 39;
-            g3.dispatchEvent(event);
-
+          g.addEventListener('paper-radio-group-changed', function () {
+            expect(items[0].checked).to.be.equal(false);
+            expect(items[1].checked).to.be.equal(false);
+            expect(items[2].checked).to.be.equal(true);
             done();
           });
+          MockInteractions.keyDownOn(g, RIGHT_ARROW);
         });
 
         test('clicking should change the selection', function (done) {
-          var items = g2.items;
+          var g = fixture('WithSelection');
+          var items = g.items;
 
-          // Initially, the first item is checked.
-          var expectedCheckedItem = 0;
-          g3.addEventListener('paper-radio-group-changed', function () {
-            expect(items[expectedCheckedItem].checked).to.be.equal(true);
+          expect(items[0].checked).to.be.equal(true);
 
-            expectedCheckedItem = 1;
-            MockInteractions.down(items[1]);
-
+          g.addEventListener('paper-radio-group-changed', function () {
+            expect(items[0].checked).to.be.equal(false);
+            expect(items[1].checked).to.be.equal(true);
+            expect(items[2].checked).to.be.equal(false);
             done();
           });
+
+          MockInteractions.tap(items[1]);
         });
+
+        test('clicking the selected item should not deselect', function (done) {
+          var g = fixture('WithSelection');
+          var items = g.items;
+
+          expect(items[0].checked).to.be.equal(true);
+          MockInteractions.tap(items[0]);
+
+          // The selection should not change, but wait for a little bit just
+          // in case it would and an event would be fired.
+          setTimeout(function() {
+            try {
+              expect(items[0].checked).to.be.equal(true);
+              expect(items[1].checked).to.be.equal(false);
+              expect(items[2].checked).to.be.equal(false);
+              done();
+            } catch (e) {
+              done(e)
+            }
+          }, 200);
+        });
+
       });
     </script>
   </body>

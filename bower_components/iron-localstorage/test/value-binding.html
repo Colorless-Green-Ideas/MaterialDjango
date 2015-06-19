@@ -82,6 +82,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('set value', function() {
         var newValue = {'foo': 'zot'};
         xtest.value = newValue;
+        xtest.$.localstorage.flushDebouncer('save');
         var v = window.localStorage.getItem(xtest.$.localstorage.name);
         v = JSON.parse(v);
         assert.equal(v.foo, newValue.foo);
