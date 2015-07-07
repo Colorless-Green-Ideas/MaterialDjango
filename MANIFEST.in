@@ -3,3 +3,4 @@ include README.md
 graft materialdjango/static
 graft materialdjango/templates
 graft materialdjango/templatetags
+graft bower_components
