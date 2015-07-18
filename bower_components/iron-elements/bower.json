@@ -1,7 +1,7 @@
 {
   "name": "iron-elements",
   "version": "1.0.1",
-  "description": "Iron elements are a set of visual and non-visual utility elements. They include elements for working with layout, user input, selection, and scaffolding apps.",
+  "description": "A set of visual and non-visual utility elements. Includes elements for working with layout, user input, selection, and scaffolding apps",
   "keywords": [
     "web-components",
     "polymer",
@@ -27,6 +27,7 @@
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
     "iron-form": "PolymerElements/iron-form#^1.0.0",
     "iron-form-element-behavior": "PolymerElements/iron-form-element-behavior#^1.0.0",
+    "iron-list": "PolymerElements/iron-list#^1.0.0",
     "iron-icon": "PolymerElements/iron-icon#^1.0.0",
     "iron-icons": "PolymerElements/iron-icons#^1.0.0",
     "iron-iconset": "PolymerElements/iron-iconset#^1.0.0",
