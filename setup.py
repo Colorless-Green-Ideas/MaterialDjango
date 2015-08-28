@@ -5,7 +5,7 @@ from setuptools import find_packages
 
 
 setup(name="MaterialDjango",
-      version="0.2a2",
+      version="0.2",
       packages=find_packages(),
       # scripts=[],
       author="Jack Laxson",
