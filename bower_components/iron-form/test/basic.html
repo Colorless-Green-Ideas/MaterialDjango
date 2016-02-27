@@ -14,12 +14,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="../../polymer/polymer.html">
-  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../iron-form.html">
   <link rel="import" href="simple-element.html">
+  <link rel="import" href="element-with-nested-form-element.html">
+  <link rel="import" href="element-with-nested-input.html">
 
 </head>
 <body>
@@ -41,6 +41,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <simple-element name="zig" value="zig"></simple-element>
         <simple-element name="zig" value="zag"></simple-element>
         <simple-element name="zig" value="zug"></simple-element>
+      </form>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="NestedDupes">
+    <template>
+      <form is="iron-form">
+        <element-with-nested-form-element name="foo" value="bar"></element-with-nested-form-element>
+        <element-with-nested-input name="zig" value="zag"></element-with-nested-input>
       </form>
     </template>
   </test-fixture>
@@ -91,6 +100,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
+  <test-fixture id="FormWithRequiredCustomElements">
+    <template>
+      <form is="iron-form" action="/responds_with_json" method="post">
+        <simple-element required></simple-element>
+      </form>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="FormWithRequiredElements">
+    <template>
+      <form is="iron-form" action="/responds_with_json" method="post">
+        <input required>
+      </form>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="FormForResetting">
+    <template>
+      <form is="iron-form">
+        <simple-element name="zig" value="zag"></simple-element>
+        <input name="foo" value="bar">
+        <input type="checkbox" name="foo" value="bar1" checked>
+        <input type="checkbox" name="foo" value="bar2">
+      </form>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="NativeSelect">
+    <template>
+      <form is="iron-form">
+        <select name="numbers" multiple>
+          <option value="one" selected>one</option>
+          <option value="two">two</option>
+          <option value="three" selected>three</option>
+          <option value="four">four</option>
+        </select>
+
+        <select name="cheese">
+          <option value="yes" selected>yes</option>
+          <option value="no">no</option>
+        </select>
+      </form>
+    </template>
+  </test-fixture>
+
   <script>
   suite('registration', function() {
     var f;
@@ -117,6 +171,90 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }, 200);
     });
   });
+
+  suite('validation', function() {
+    test('custom elements are validated if they don\'t have a name', function() {
+      var f = fixture('FormWithRequiredCustomElements');
+      assert.equal(f._customElements.length, 1);
+
+      var simpleElement = f._customElements[0];
+      assert.isFalse(!!simpleElement.name)
+
+      // custom elements
+      assert.isFalse(f.validate());
+      assert.isTrue(simpleElement.invalid);
+
+      simpleElement.value = 'batman';
+
+      assert.isTrue(f.validate());
+      assert.isFalse(simpleElement.invalid);
+
+      // Since the elements don't have names, they don't get serialized.
+      var json = f.serialize();
+      assert.equal(Object.keys(json).length, 0);
+    });
+
+    test('native elements are validated if they don\'t have a name', function() {
+      var f = fixture('FormWithRequiredElements');
+      assert.equal(f.elements.length, 1);
+
+      var input = f.elements[0];
+
+      assert.isFalse(!!input.name)
+
+      assert.isFalse(f.validate());
+      assert.isFalse(input.validity.valid);
+
+      input.value = 'robin';
+
+      assert.isTrue(f.validate());
+      assert.isTrue(input.validity.valid);
+
+      // Since the elements don't have names, they don't get serialized.
+      var json = f.serialize();
+      assert.equal(Object.keys(json).length, 0);
+    });
+
+    test('custom elements are validated if they have a name', function() {
+      var f = fixture('FormWithRequiredCustomElements');
+      assert.equal(f._customElements.length, 1);
+
+      var simpleElement = f._customElements[0];
+      simpleElement.name = 'zig';
+
+      assert.isFalse(f.validate());
+      assert.isTrue(simpleElement.invalid);
+
+      simpleElement.value = 'batman';
+
+      assert.isTrue(f.validate());
+      assert.isFalse(simpleElement.invalid);
+
+      // The elements have names, so they're serialized.
+      var json = f.serialize();
+      assert.equal(Object.keys(json).length, 1);
+    });
+
+  test('native elements are validated if they have a name', function() {
+    var f = fixture('FormWithRequiredElements');
+    assert.equal(f.elements.length, 1);
+
+    var input = f.elements[0];
+    input.name = 'zag';
+
+    assert.isFalse(f.validate());
+    assert.isFalse(input.validity.valid);
+
+    input.value = 'robin';
+
+    assert.isTrue(f.validate());
+    assert.isTrue(input.validity.valid);
+
+    // The elements have names, so they're serialized.
+    var json = f.serialize();
+    assert.equal(Object.keys(json).length, 1);
+  });
+});
 
   suite('serializing', function() {
     var f;
@@ -162,6 +300,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       assert.equal(json['foo'][1], 'bar3');
     });
 
+    test('serializes a native select element with or without multiple selection', function() {
+      f = fixture('NativeSelect');
+
+      assert.equal(f._customElements.length, 0);
+      assert.equal(f.elements.length, 2);
+
+      var json = f.serialize();
+      assert.equal(Object.keys(json).length, 2);
+
+      // Single selection.
+      assert.equal(json['cheese'], 'yes');
+
+      // Multiple selection.
+      assert.equal(json['numbers'].length, 2);
+      assert.equal(json['numbers'][0], 'one');
+      assert.equal(json['numbers'][1], 'three');
+    });
+
     test('does not serialize disabled elements', function() {
       f = fixture('Disabled');
 
@@ -171,6 +327,79 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var json = f.serialize();
       assert.equal(Object.keys(json).length, 1);
       assert.equal(json['foo'], 'bar1');
+    });
+
+    test('nested elements are only serialized once', function() {
+      f = fixture('NestedDupes');
+
+      assert.equal(f._customElements.length, 3);
+      
+      var json = f.serialize();
+      assert.equal(Object.keys(json).length, 2);
+      assert.equal(json['foo'], 'bar');
+      assert.equal(json['zig'], 'zag');
+    });
+
+  });
+
+  suite('resetting', function () {
+    test('form restores the default values', function(done) {
+      var form = fixture('FormForResetting');
+
+      assert.equal(form._customElements.length, 1);
+      assert.equal(form.elements.length, 3);
+
+      // Initial values.
+      var customElement = form.querySelector('simple-element');
+      var input = form.querySelector('input[name="foo"]');
+      var checkbox1 = form.querySelectorAll('input[type="checkbox"]')[0];
+      var checkbox2 = form.querySelectorAll('input[type="checkbox"]')[1];
+
+      assert.equal(customElement.value, 'zag');
+      assert.equal(input.value, 'bar');
+      assert.isTrue(checkbox1.checked);
+      assert.isFalse(checkbox2.checked);
+
+      // Change the values.
+      customElement.value = 'not zag';
+      input.value = 'not bar';
+      checkbox1.checked = false;
+      checkbox2.checked = true;
+      assert.equal(customElement.value, 'not zag');
+      assert.equal(input.value, 'not bar');
+      assert.isFalse(checkbox1.checked);
+      assert.isTrue(checkbox2.checked);
+
+      form.addEventListener('iron-form-reset', function(event) {
+        // Restored initial values.
+        assert.equal(customElement.value, 'zag');
+        assert.equal(input.value, 'bar');
+        assert.isTrue(checkbox1.checked);
+        assert.isFalse(checkbox2.checked);
+        done();
+      });
+
+      form.reset();
+
+    });
+
+    test('validation messages are cleared', function(done) {
+      var form = fixture('FormWithRequiredCustomElements');
+      assert.equal(form._customElements.length, 1);
+
+      var customElement = form.querySelector('simple-element');
+
+      assert.isFalse(form.validate());
+      assert.isTrue(customElement.invalid);
+
+      form.addEventListener('iron-form-reset', function(event) {
+        // Cleared validation messages.
+        assert.isFalse(customElement.invalid);
+        done();
+      });
+
+      form.reset();
+
     });
 
   });
@@ -238,6 +467,71 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       server.respond();
     });
 
+    test('can modify the request in the presubmit', function(done) {
+      form = fixture('FormGet');
+
+      var submitted = false;
+      var presubmitted = false;
+
+      form.addEventListener('iron-form-submit', function() {
+        submitted = true;
+      });
+
+      form.addEventListener('iron-form-presubmit', function() {
+        presubmitted = true;
+        this.request.params = {batman: true};
+      });
+
+      form.addEventListener('iron-form-response', function(event) {
+        expect(submitted).to.be.equal(true);
+        expect(presubmitted).to.be.equal(true);
+
+        // We have changed the json parameters
+        expect(event.detail.url).to.contain('batman=true');
+
+        var response = event.detail.response;
+        expect(response).to.be.ok;
+        expect(response).to.be.an('object');
+        expect(response.success).to.be.equal(true);
+        done();
+      });
+
+      form.submit();
+      server.respond();
+    });
+
+
+    test('can do a custom submission in the presubmit', function(done) {
+      form = fixture('FormGet');
+
+      var presubmitted = false;
+
+      // Since we are not using the normal form submission, these events should
+      // never be called.
+      var formResponseHandler = sinon.spy();
+      form.addEventListener('iron-form-response', formResponseHandler);
+      var formSubmitHandler = sinon.spy();
+      form.addEventListener('iron-form-submit', formSubmitHandler);
+
+      form.addEventListener('iron-form-presubmit', function(event) {
+        presubmitted = true;
+        event.preventDefault();
+
+        // Your custom submission logic could go here (like using Firebase).
+        // In this case, fire a custom event as a an example.
+        this.fire('custom-form-submit');
+      });
+
+      form.addEventListener('custom-form-submit', function(event) {
+        expect(presubmitted).to.be.equal(true);
+        expect(formResponseHandler.callCount).to.be.equal(0);
+        expect(formSubmitHandler.callCount).to.be.equal(0);
+        done();
+      });
+
+      form.submit();
+    });
+
     test('can submit with method=get', function(done) {
       form = fixture('FormGet');
 
@@ -248,8 +542,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       form.addEventListener('iron-form-response', function(event) {
         expect(submitted).to.be.equal(true);
+        expect(event.detail.url).to.contain('zig=zag');
 
-        var response = event.detail;
+        var response = event.detail.response;
         expect(response).to.be.ok;
         expect(response).to.be.an('object');
         expect(response.success).to.be.equal(true);
@@ -270,7 +565,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       form.addEventListener('iron-form-response', function(event) {
         expect(submitted).to.be.equal(true);
-        var response = event.detail;
+
+        var response = event.detail.response;
         expect(response).to.be.ok;
         expect(response).to.be.an('object');
         expect(response.success).to.be.equal(true);
