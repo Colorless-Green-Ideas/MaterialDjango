@@ -1,5 +1,5 @@
 (function () {
-	if (!self.Prism || !self.document || !document.querySelector) {
+	if (typeof self === 'undefined' || !self.Prism || !self.document || !document.querySelector) {
 		return;
 	}
 
@@ -71,6 +71,6 @@
 
 	};
 
-	self.Prism.fileHighlight();
+	document.addEventListener('DOMContentLoaded', self.Prism.fileHighlight);
 
 })();
