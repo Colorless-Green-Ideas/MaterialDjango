@@ -1,7 +1,7 @@
 from django import template
 from django.conf import settings
 from django.templatetags.static import static
-
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -17,4 +17,4 @@ def dep(value="polymer/polymer.html"):
 @register.simple_tag
 def polymer_shim():
     static_url = static('materialdjango/components/bower_components/webcomponentsjs/webcomponents.js')
-    return "<script src='{0}'></script>".format(static_url)
+    return mark_safe("<script src='{0}'></script>".format(static_url))
