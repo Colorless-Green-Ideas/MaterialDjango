@@ -12,9 +12,9 @@ thing! https://github.com/PolymerLabs/tedium/issues
 
 -->
 
-[![Build Status](https://travis-ci.org/PolymerElements/iron-collapse.svg?branch=master)](https://travis-ci.org/PolymerElements/iron-collapse)
+[![Build status](https://travis-ci.org/PolymerElements/iron-collapse.svg?branch=master)](https://travis-ci.org/PolymerElements/iron-collapse)
 
-_[Demo and API Docs](https://elements.polymer-project.org/elements/iron-collapse)_
+_[Demo and API docs](https://elements.polymer-project.org/elements/iron-collapse)_
 
 
 ##&lt;iron-collapse&gt;

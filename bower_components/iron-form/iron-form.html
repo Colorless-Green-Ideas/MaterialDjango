@@ -452,6 +452,18 @@ event and do your own custom submission:
             el.checked = this._customElementsInitialValues[i];
           } else {
             el.value = this._customElementsInitialValues[i];
+
+            // In the shady DOM, the native form is all-seeing, and will
+            // reset the nested inputs inside <paper-input> and <paper-textarea>.
+            // In particular, it resets them to what it thinks the default value
+            // is (i.e. "", before the bindings have ran), and since this is
+            // a programmatic update, it also doesn't fire any events.
+            // Which means we need to manually update the native element's value.
+            if (el.inputElement) {
+              el.inputElement.value = el.value;
+            } else if (el.textarea) {
+              el.textarea.value = el.value;
+            }
           }
           el.invalid = false;
         }
@@ -473,8 +485,8 @@ event and do your own custom submission:
         // Use logical parentnode, or native ShadowRoot host.
         parent = Polymer.dom(parent).parentNode || parent.host;
 
-        // Check if the parent was registered.
-        if (parent && parent._parentForm === this) {
+        // Check if the parent was registered and submittable.
+        if (parent && parent.name && parent._parentForm === this) {
           return true;
         }
       }
