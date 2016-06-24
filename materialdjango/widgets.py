@@ -2,6 +2,7 @@ from django.forms.widgets import TextInput, PasswordInput, EmailInput
 from django.utils.html import format_html
 
 # ref https://github.com/django/django/blob/stable/1.8.x/django/forms/widgets.py
+# https://github.com/django/django/blob/stable/1.10.x/django/forms/widgets.py
 
 class PaperTextInput(TextInput):
 
@@ -61,3 +62,28 @@ class PaperEmailInput(EmailInput):
             <input is="iron-input" name="{0}" value="{1}" type="email">
             </paper-input-container>"""
             return format_html(html, name, value)
+
+class PaperTextArea(TextInput):
+    def render(self, name, value, attrs=None):
+        if value is None:
+            html = u"""<paper-input-container label='{0}' autoValidate>
+            <label>{0}</label>
+            <iron-autogrow-textarea name="{1}">
+            </paper-input-container>"""
+            if 'label' in self.attrs:
+                return html.format(self.attrs['label'], name)
+            else:
+                return format_html(html, name, name)
+        else:
+            html = u"""<paper-input-container label='{0}' autoValidate>
+            <label>{0}</label>
+            <iron-autogrow-textarea name="{0}" value={1}>
+            </paper-input-container>"""
+            return format_html(html, name, value)
+
+class PaperCheckboxInput(CheckboxInput):
+    def __init__(self, attrs=None, check_test=None):
+        super(PaperCheckboxInput, self).__init__(attrs)
+    def render(self, name, value, attrs=None):
+        html = u"""<paper-checkbox>{0}</paper-checkbox>"""
+        return format_html(html, name)
