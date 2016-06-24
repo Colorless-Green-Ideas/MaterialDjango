@@ -1,6 +1,6 @@
 {
   "name": "paper-checkbox",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A material design checkbox",
   "authors": [
     "The Polymer Authors"
@@ -37,11 +37,11 @@
     "iron-test-helpers": "PolymerElements/iron-test-helpers#^1.0.0"
   },
   "main": "paper-checkbox.html",
-  "_release": "1.2.0",
+  "_release": "1.2.1",
   "_resolution": {
     "type": "version",
-    "tag": "v1.2.0",
-    "commit": "0a0b623b5d6356a24e1a00095f0d58b05341cf49"
+    "tag": "v1.2.1",
+    "commit": "79f6780db55f50d5ef6602e4f3ea6fd1e7f2abf2"
   },
   "_source": "git://github.com/PolymerElements/paper-checkbox.git",
   "_target": "^1.0.0",
