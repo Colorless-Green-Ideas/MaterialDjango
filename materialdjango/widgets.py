@@ -1,4 +1,4 @@
-from django.forms.widgets import TextInput, PasswordInput, EmailInput
+from django.forms.widgets import TextInput, PasswordInput, EmailInput, CheckboxInput, Textarea
 from django.utils.html import format_html
 
 # ref https://github.com/django/django/blob/stable/1.8.x/django/forms/widgets.py
@@ -63,7 +63,7 @@ class PaperEmailInput(EmailInput):
             </paper-input-container>"""
             return format_html(html, name, value)
 
-class PaperTextArea(TextInput):
+class PaperTextArea(Textarea):
     def render(self, name, value, attrs=None):
         if value is None:
             html = u"""<paper-input-container label='{0}' autoValidate>
