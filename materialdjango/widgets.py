@@ -66,18 +66,20 @@ class PaperEmailInput(EmailInput):
 class PaperTextArea(Textarea):
     def render(self, name, value, attrs=None):
         if value is None:
-            html = u"""<paper-input-container label='{0}' attr-for-value="value">
-            <label>{0}</label>
-            <iron-autogrow-textarea name="{1}">
+            html = u"""<paper-input-container>
+            <label>{1}</label>
+            <iron-autogrow-textarea class="paper-input-input" name="{0}" rows=3>
+            </iron-autogrow-textarea>
             </paper-input-container>"""
             if 'label' in self.attrs:
                 return html.format(self.attrs['label'], name)
             else:
                 return format_html(html, name, name)
         else:
-            html = u"""<paper-input-container label='{0}' attr-for-value="value">
+
+            html = u"""<paper-input-container>
             <label>{0}</label>
-            <iron-autogrow-textarea name="{0}" placeholder="{0}" value={1}>
+            <iron-autogrow-textarea class="paper-input-input" name="{0}" value="{1}" rows=3>
             </iron-autogrow-textarea>
             </paper-input-container>"""
             return format_html(html, name, value)
