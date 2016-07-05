@@ -1,6 +1,7 @@
 # MaterialDjango
 [![Code Health](https://landscape.io/github/Colorless-Green-Ideas/MaterialDjango/master/landscape.svg?style=flat)](https://landscape.io/github/Colorless-Green-Ideas/MaterialDjango/master)
 [![PyPI](https://img.shields.io/pypi/v/materialdjango.svg)](https://pypi.python.org/pypi/MaterialDjango)
+[![Documentation Status](https://readthedocs.org/projects/materialdjango/badge/?version=latest)](http://materialdjango.readthedocs.io/en/latest/?badge=latest)
 
 Polymer Paper-UI widgets and tools for django
 
