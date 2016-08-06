@@ -18,8 +18,9 @@ setup(name="MaterialDjango",
       url="https://github.com/Colorless-Green-Ideas/MaterialDjango",
       keywords=["polymer",  "paper-ui", "material design", "widgets", "theme"],
       classifiers=["License :: OSI Approved :: MIT License",
-      'Intended Audience :: Developers', 'Development Status :: 3 - Alpha', 
+      'Intended Audience :: Developers', 'Development Status :: 4 - Beta', 
       "Framework :: Django", "Topic :: Text Processing :: Markup :: HTML", 
       'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-      'Programming Language :: Python :: 2', 'Programming Language :: Python :: 2.7']
+      'Programming Language :: Python :: 2', 'Programming Language :: Python :: 2.7',
+      "Programming Language :: Python :: 3.5",]
       )

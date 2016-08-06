@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from widgets import PaperTextInput, PaperPasswordInput
+from materialdjango.widgets import PaperTextInput, PaperPasswordInput
 
 
 class PaperLoginForm(AuthenticationForm):
