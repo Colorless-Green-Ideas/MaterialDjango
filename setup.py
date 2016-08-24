@@ -5,7 +5,7 @@ from setuptools import find_packages
 
 
 setup(name="MaterialDjango",
-      version="0.2.1",
+      version="0.2.4",
       packages=find_packages(),
       # scripts=[],
       author="Jack Laxson",
@@ -13,12 +13,14 @@ setup(name="MaterialDjango",
       description="A Django library bringing paper-ui and iron polymer elements to django",
       license="MIT",
       include_package_data=True,
+      zip_safe=False,
       install_requires=["django"],
       url="https://github.com/Colorless-Green-Ideas/MaterialDjango",
-      keywords="polymer paper-ui material design widgets theme",
+      keywords=["polymer",  "paper-ui", "material design", "widgets", "theme"],
       classifiers=["License :: OSI Approved :: MIT License",
-      'Intended Audience :: Developers', 'Development Status :: 3 - Alpha', 
+      'Intended Audience :: Developers', 'Development Status :: 4 - Beta', 
       "Framework :: Django", "Topic :: Text Processing :: Markup :: HTML", 
       'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-      'Programming Language :: Python :: 2',]
+      'Programming Language :: Python :: 2', 'Programming Language :: Python :: 2.7',
+      "Programming Language :: Python :: 3.5",]
       )
