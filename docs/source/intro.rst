@@ -21,7 +21,7 @@ becomes ``{{ "paper-input/paper-input-container.html" |dep}}``
 
 We vendor polymer elements for import from ``PolymerElements/paper-elements`` and ``PolymerElements/iron-elements``. Approximate versions specified in our `bower.json <https://github.com/Colorless-Green-Ideas/MaterialDjango/blob/master/bower.json>`_. If you'd like another suite added to our vendoring file an issue on github.
 
-We also ship widgets for use in dajngo forms.
+We also ship widgets for use in Django forms.
 
 Usage
 =====
