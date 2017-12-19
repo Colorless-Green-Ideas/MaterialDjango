@@ -32,7 +32,7 @@
     "tag": "v1.0.3",
     "commit": "77e1c4bf204e26ed07d670374608f3a050b9206c"
   },
-  "_source": "git://github.com/PolymerElements/iron-scroll-threshold.git",
+  "_source": "https://github.com/PolymerElements/iron-scroll-threshold.git",
   "_target": "^1.0.0",
   "_originalSource": "PolymerElements/iron-scroll-threshold"
 }

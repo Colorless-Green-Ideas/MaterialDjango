@@ -85,6 +85,11 @@ var components = {
 			"title": "AppleScript",
 			"owner": "Golmote"
 		},
+		"arduino": {
+			"title": "Arduino",
+			"require": "cpp",
+			"owner": "eisbehr-"
+		},
 		"asciidoc": {
 			"title": "AsciiDoc",
 			"owner": "Golmote"
@@ -94,13 +99,13 @@ var components = {
 			"require": "markup",
 			"owner": "nauzilus"
 		},
-		"autoit": {
-			"title": "AutoIt",
-			"owner": "Golmote"
-		},
 		"autohotkey": {
 			"title": "AutoHotkey",
 			"owner": "aviaryan"
+		},
+		"autoit": {
+			"title": "AutoIt",
+			"owner": "Golmote"
 		},
 		"bash": {
 			"title": "Bash",
@@ -167,6 +172,11 @@ var components = {
 			"require": "clike",
 			"owner": "Golmote"
 		},
+		"django": {
+			"title": "Django/Jinja2",
+			"require": "markup",
+			"owner": "romanvm"
+		},
 		"diff": {
 			"title": "Diff",
 			"owner": "uranusjr"
@@ -191,6 +201,11 @@ var components = {
 			"title": "F#",
 			"require": "clike",
 			"owner": "simonreynolds7"
+		},
+		"flow": {
+			"title": "Flow",
+			"require": "javascript",
+			"owner": "Golmote"
 		},
 		"fortran": {
 			"title": "Fortran",
@@ -260,11 +275,6 @@ var components = {
 		},
 		"j": {
 			"title": "J",
-			"owner": "Golmote"
-		},
-		"jade": {
-			"title": "Jade",
-			"require": "javascript",
 			"owner": "Golmote"
 		},
 		"java": {
@@ -340,6 +350,11 @@ var components = {
 			"title": "Monkey",
 			"owner": "Golmote"
 		},
+		"n4js":{
+			"title": "N4JS",
+			"require": "javascript",
+			"owner": "bsmith-n4"
+		},
 		"nasm": {
 			"title": "NASM",
 			"owner": "rbmj"
@@ -369,6 +384,11 @@ var components = {
 		"ocaml": {
 			"title": "OCaml",
 			"owner": "Golmote"
+		},
+		"opencl": {
+			"title": "OpenCL",
+			"require": "cpp",
+			"owner": "Milania1"
 		},
 		"oz": {
 			"title": "Oz",
@@ -423,6 +443,11 @@ var components = {
 			"require": "clike",
 			"owner": "just-boris"
 		},
+		"pug": {
+			"title": "Pug",
+			"require": "javascript",
+			"owner": "Golmote"
+		},
 		"puppet": {
 			"title": "Puppet",
 			"owner": "Golmote"
@@ -453,6 +478,10 @@ var components = {
 			"require": ["markup", "javascript"],
 			"owner": "vkbansal"
 		},
+		"renpy": {
+			"title": "Ren'py",
+			"owner": "HyuchiaDiego"
+        },
 		"reason": {
 			"title": "Reason",
 			"require": "clike",
@@ -543,6 +572,11 @@ var components = {
 			"require": "javascript",
 			"owner": "vkbansal"
 		},
+		"vbnet": {
+			"title": "VB.Net",
+			"require": "basic",
+			"owner": "Bigsby"
+		},
 		"verilog": {
 			"title": "Verilog",
 			"owner": "a-rey"
@@ -584,7 +618,8 @@ var components = {
 		"wpd": "WebPlatform Docs",
 		"custom-class": {
 			"title": "Custom Class",
-			"owner": "dvkndn"
+			"owner": "dvkndn",
+			"noCSS": true
 		},
 		"file-highlight": {
 			"title": "File Highlight",
