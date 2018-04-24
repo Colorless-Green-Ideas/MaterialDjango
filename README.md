@@ -7,7 +7,7 @@ Polymer Paper-UI widgets and tools for django
 
 
 # Install
- - `pip install materialdjango`
+ - `pip install materialdjango` or install from git if you want more frequent (possibly breaking) changes.
  - add `materialdjango` to your INSTALLED_APPS in settings.py
  - re-run `manage.py collectstatic`
 
