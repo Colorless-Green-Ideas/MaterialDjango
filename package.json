@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@polymer/app-layout": "^3.0.0-pre.19",
+    "@polymer/font-roboto": "^3.0.0-pre.19",
     "@polymer/paper-button": "^3.0.0-pre.19",
     "@polymer/paper-icon-button": "^3.0.0-pre.19",
     "@polymer/paper-input": "^3.0.0-pre.18",
