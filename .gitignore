@@ -54,3 +54,4 @@ docs/_build/
 target/
 venv/
 staticfiles/
+.mypy_cache

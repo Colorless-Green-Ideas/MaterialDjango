@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "@polymer/app-layout": "^3.0.0-pre.19",
+    "@polymer/paper-button": "^3.0.0-pre.19",
+    "@polymer/paper-icon-button": "^3.0.0-pre.19",
+    "@polymer/paper-input": "^3.0.0-pre.18",
+    "@polymer/polymer": "^3.0.2",
+    "@webcomponents/webcomponentsjs": "^2.0.1"
+  },
+  "name": "MaterialDjango",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Colorless-Green-Ideas/MaterialDjango.git",
+  "author": "Jack Laxson <jack@getpizza.cat>",
+  "license": "MIT",
+  "devDependencies": {
+    "rollup-plugin-collect-sass": "^1.0.9",
+    "rollup-plugin-node-resolve": "^3.3.0"
+  }
+}
