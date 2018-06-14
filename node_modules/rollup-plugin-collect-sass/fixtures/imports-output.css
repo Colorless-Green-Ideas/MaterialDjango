@@ -1,0 +1,15 @@
+@import url(extension.css);
+@import 'http://www.example.com/styles.css';
+@import url("http://www.example.com/url.css");
+body::after {
+  content: 'underscore'; }
+body::after {
+  content: 'nounderscore'; }
+body::after {
+  content: 'underscorescssext'; }
+body::after {
+  content: 'scssext'; }
+body::after {
+  content: 'first'; }
+body::after {
+  content: 'second'; }
