@@ -15,6 +15,7 @@
   "author": "Jack Laxson <jack@getpizza.cat>",
   "license": "MIT",
   "devDependencies": {
+    "rollup": "^0.63.2",
     "rollup-plugin-collect-sass": "^1.0.9",
     "rollup-plugin-node-resolve": "^3.3.0"
   }
