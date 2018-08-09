@@ -6,7 +6,7 @@ from django.utils.html import format_html
 
 class PaperTextInput(TextInput):
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         # Unlike inputs using paper-input-container directly,
         # paper-input does not work out of the box with the native form
         # element.
@@ -26,7 +26,7 @@ class PaperTextInput(TextInput):
 
 class PaperPasswordInput(PasswordInput):
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if value is None:
             html = u"""<paper-input-container label='{0}'>
             <label>{0}</label>
@@ -46,7 +46,7 @@ class PaperEmailInput(EmailInput):
             self.attrs = attrs.copy()
         else:
             self.attrs = {}
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if value is None:
             html = u"""<paper-input-container label='{0}' autoValidate>
             <label>{0}</label>
@@ -64,7 +64,7 @@ class PaperEmailInput(EmailInput):
             return format_html(html, name, value)
 
 class PaperTextArea(Textarea):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if value is None:
             html = u"""<paper-input-container>
             <label>{1}</label>
@@ -87,6 +87,6 @@ class PaperTextArea(Textarea):
 class PaperCheckboxInput(CheckboxInput):
     def __init__(self, attrs=None, check_test=None):
         super(PaperCheckboxInput, self).__init__(attrs)
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         html = u"""<paper-checkbox>{0}</paper-checkbox>"""
         return format_html(html, name)
