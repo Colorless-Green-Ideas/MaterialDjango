@@ -5,7 +5,7 @@ from setuptools import find_packages
 
 
 setup(name="MaterialDjango",
-      version="0.2.6",
+      version="3.0a1",
       packages=find_packages(),
       # scripts=[],
       author="Jack Laxson",
@@ -22,5 +22,5 @@ setup(name="MaterialDjango",
       "Framework :: Django", "Topic :: Text Processing :: Markup :: HTML", 
       'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
       'Programming Language :: Python :: 2', 'Programming Language :: Python :: 2.7',
-      "Programming Language :: Python :: 3.5",]
+      "Programming Language :: Python :: 3.5","Programming Language :: Python :: 3.6"]
       )

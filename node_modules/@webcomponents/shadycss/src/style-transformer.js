@@ -43,34 +43,60 @@ class StyleTransformer {
   /**
    * Given a node and scope name, add a scoping class to each node
    * in the tree. This facilitates transforming css into scoped rules.
-   * @param {?} node
-   * @param {?} scope
-   * @param {?=} shouldRemoveScope
+   * @param {!Node} node
+   * @param {string} scope
+   * @param {boolean=} shouldRemoveScope
+   * @deprecated
    */
   dom(node, scope, shouldRemoveScope) {
     // one time optimization to skip scoping...
     if (node['__styleScoped']) {
       node['__styleScoped'] = null;
     } else {
-      this._transformDom(node, scope || '', shouldRemoveScope);
+      const fn = (node) => {
+        this.element(node, scope || '', shouldRemoveScope);
+      };
+      this._transformDom(node, fn);
     }
   }
 
-  _transformDom(node, selector, shouldRemoveScope) {
-    if (node.nodeType === Node.ELEMENT_NODE) {
-      this.element(node, selector, shouldRemoveScope);
+  /**
+   * Given a node and scope name, add a scoping class to each node in the tree.
+   * @param {!Node} node
+   * @param {string} scope
+   */
+  domAddScope(node, scope) {
+    // one time optimization to skip scoping...
+    if (node['__styleScoped']) {
+      node['__styleScoped'] = null;
+    } else {
+      const fn = (node) => {
+        this.element(node, scope || '');
+      };
+      this._transformDom(node, fn);
     }
-    let c$ = (node.localName === 'template') ?
+  }
+
+  /**
+   * @param {!Node} startNode
+   * @param {!function(!Node)} transformer
+   */
+  _transformDom(startNode, transformer) {
+    if (startNode.nodeType === Node.ELEMENT_NODE) {
+      transformer(startNode)
+    }
+    let c$ = (startNode.localName === 'template') ?
       // In case the template is in svg context, fall back to the node
       // since it won't be an HTMLTemplateElement with a .content property
-      (node.content || node._content || node).childNodes :
-      node.children || node.childNodes;
+      (startNode.content || startNode._content || startNode).childNodes :
+      startNode.children || startNode.childNodes;
     if (c$) {
       for (let i=0; i<c$.length; i++) {
-        this._transformDom(c$[i], selector, shouldRemoveScope);
+        this._transformDom(c$[i], transformer);
       }
     }
   }
+
   /**
    * @param {?} element
    * @param {?} scope
@@ -102,6 +128,41 @@ class StyleTransformer {
           StyleUtil.setElementClassRaw(element, newValue);
         }
       }
+    }
+  }
+
+  /**
+   * Given a node, replace the scoping class to each subnode in the tree.
+   * @param {!Node} node
+   * @param {string} oldScope
+   * @param {string} newScope
+   */
+  domReplaceScope(node, oldScope, newScope) {
+    // one time optimization to skip scoping...
+    if (node['__styleScoped']) {
+      node['__styleScoped'] = null;
+    } else {
+      const fn = (node) => {
+        this.element(node, oldScope, true);
+        this.element(node, newScope);
+      };
+      this._transformDom(node, fn);
+    }
+  }
+  /**
+   * Given a node, remove the scoping class to each subnode in the tree.
+   * @param {!Node} node
+   * @param {string} oldScope
+   */
+  domRemoveScope(node, oldScope) {
+    // one time optimization to skip scoping...
+    if (node['__styleScoped']) {
+      node['__styleScoped'] = null;
+    } else {
+      const fn = (node) => {
+        this.element(node, oldScope || '', true);
+      };
+      this._transformDom(node, fn);
     }
   }
 
@@ -186,7 +247,7 @@ class StyleTransformer {
    * @param {string=} hostScope
    */
   _transformRuleCss(rule, transformer, scope, hostScope) {
-    let p$ = rule['selector'].split(COMPLEX_SELECTOR_SEP);
+    let p$ = StyleUtil.splitSelectorList(rule['selector']);
     // we want to skip transformation of rules that appear in keyframes,
     // because they are keyframe selectors, not element selectors.
     if (!StyleUtil.isKeyframesSelector(rule)) {
@@ -194,7 +255,7 @@ class StyleTransformer {
         p$[i] = transformer.call(this, p, scope, hostScope);
       }
     }
-    return p$.join(COMPLEX_SELECTOR_SEP);
+    return p$.filter((part) => Boolean(part)).join(COMPLEX_SELECTOR_SEP);
   }
 
   /**
@@ -212,6 +273,44 @@ class StyleTransformer {
     });
   }
 
+  /**
+   * Preserve `:matches()` selectors by replacing them with MATCHES_REPLACMENT
+   * and returning an array of `:matches()` selectors.
+   * Use `_replacesMatchesPseudo` to replace the `:matches()` parts
+   *
+   * @param {string} selector
+   * @return {{selector: string, matches: !Array<string>}}
+   */
+  _preserveMatchesPseudo(selector) {
+    /** @type {!Array<string>} */
+    const matches = [];
+    let match;
+    while ((match = selector.match(MATCHES))) {
+      const start = match.index;
+      const end = StyleUtil.findMatchingParen(selector, start);
+      if (end === -1) {
+        throw new Error(`${match.input} selector missing ')'`)
+      }
+      const part = selector.slice(start, end + 1);
+      selector = selector.replace(part, MATCHES_REPLACEMENT);
+      matches.push(part);
+    }
+    return {selector, matches};
+  }
+
+  /**
+   * Replace MATCHES_REPLACMENT character with the given set of `:matches()`
+   * selectors.
+   *
+   * @param {string} selector
+   * @param {!Array<string>} matches
+   * @return {string}
+   */
+  _replaceMatchesPseudo(selector, matches) {
+    const parts = selector.split(MATCHES_REPLACEMENT);
+    return matches.reduce((acc, cur, idx) => acc + cur + parts[idx + 1], parts[0]);
+  }
+
 /**
  * @param {string} selector
  * @param {string} scope
@@ -226,6 +325,14 @@ class StyleTransformer {
       selector = selector.replace(NTH, (m, type, inner) => `:${type}(${inner.replace(/\s/g, '')})`)
       selector = this._twiddleNthPlus(selector);
     }
+    // Preserve selectors like `:-webkit-any` so that SIMPLE_SELECTOR_SEP does
+    // not get confused by spaces inside the pseudo selector
+    const isMatches = MATCHES.test(selector);
+    /** @type {!Array<string>} */
+    let matches;
+    if (isMatches) {
+      ({selector, matches} = this._preserveMatchesPseudo(selector));
+    }
     selector = selector.replace(SLOTTED_START, `${HOST} $1`);
     selector = selector.replace(SIMPLE_SELECTOR_SEP, (m, c, s) => {
       if (!stop) {
@@ -236,6 +343,10 @@ class StyleTransformer {
       }
       return c + s;
     });
+    // replace `:matches()` selectors
+    if (isMatches) {
+      selector = this._replaceMatchesPseudo(selector, matches);
+    }
     if (isNth) {
       selector = this._twiddleNthPlus(selector);
     }
@@ -335,9 +446,14 @@ class StyleTransformer {
  * @param {string} selector
  */
   _transformDocumentSelector(selector) {
-    return selector.match(SLOTTED) ?
-      this._transformComplexSelector(selector, SCOPE_DOC_SELECTOR) :
-      this._transformSimpleSelector(selector.trim(), SCOPE_DOC_SELECTOR);
+    if (selector.match(HOST)) {
+      // remove ':host' type selectors in document rules
+      return '';
+    } else if (selector.match(SLOTTED)) {
+      return this._transformComplexSelector(selector, SCOPE_DOC_SELECTOR)
+    } else {
+      return this._transformSimpleSelector(selector.trim(), SCOPE_DOC_SELECTOR);
+    }
   }
 }
 
@@ -361,5 +477,7 @@ let CSS_CLASS_PREFIX = '.';
 let PSEUDO_PREFIX = ':';
 let CLASS = 'class';
 let SELECTOR_NO_MATCH = 'should_not_match';
+const MATCHES = /:(?:matches|any|-(?:webkit|moz)-any)/;
+const MATCHES_REPLACEMENT = '\u{e000}';
 
 export default new StyleTransformer()
